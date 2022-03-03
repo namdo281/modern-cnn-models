@@ -18,13 +18,19 @@ class MnistDataLoader(BaseDataLoader):
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
 
 class CatDogDataLoader(BaseDataLoader):
-    def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True):
+    def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
         self.data_dir = data_dir
-        compose_transform = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            Normalize(0, 1)
-        ])
+        if resize:
+            compose_transform = transforms.Compose([
+                transforms.Resize(resize) ,
+                transforms.ToTensor(),
+                Normalize(0, 1)
+            ])
+        else:
+            compose_transform = transforms.Compose([
+                transforms.ToTensor(),
+                Normalize(0,1)
+            ])
         self.dataset = CatDogDataset(data_dir, compose_transform)
         print(self.dataset)
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)

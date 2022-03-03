@@ -176,10 +176,10 @@ class VGGNet(MnistModel):
         return output
 
 class GoogLeNet(MnistModel):
-    def __init__(self):
+    def __init__(self, in_channels = 3, num_classes=10):
         super().__init__()
         self.conv1 = nn.Conv2d(
-            in_channels=1,
+            in_channels=in_channels,
             out_channels=64,
             kernel_size=7,
             stride=2,
