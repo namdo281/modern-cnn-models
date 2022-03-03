@@ -16,7 +16,7 @@ class AlexNet(MnistModel):
     def __init__ (self):
         super().__init__()
         self.conv1 = nn.Conv2d(
-            in_channels= 1,
+            in_channels= 3,
             out_channels=96,
             stride= 4,
             kernel_size= 11,
