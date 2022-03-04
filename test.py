@@ -47,6 +47,7 @@ def main(config):
 
     with torch.no_grad():
         for i, (data, target) in enumerate(tqdm(data_loader)):
+            print(i)
             data, target = data.to(device), target.to(device)
             output = model(data)
 

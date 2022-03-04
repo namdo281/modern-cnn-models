@@ -1,17 +1,17 @@
-name: CatDogNet
+name: MnistNet
 n_gpu: 0
 
 arch: 
     type: AlexNet
     args: 
-        in_channels: 3
+        in_channels: 1
         # k: 12
-        num_classes: 2
+        num_classes: 10
     
 data_loader: 
-    type: CatDogDataLoader
+    type: MnistDataLoader
     args:
-        data_dir: data/catdog/
+        data_dir: data/
         batch_size: 128
         shuffle: true
         validation_split: 0.2

@@ -3,7 +3,7 @@ from torchvision.transforms import Resize, ToTensor, Normalize
 from base import BaseDataLoader
 import datasets
 from torchvision import datasets as dts
-from datasets import CatDogDataset
+from datasets import CatDogDataset, BallDataset
 import os
 class MnistDataLoader(BaseDataLoader):
     """
@@ -25,8 +25,11 @@ class MnistDataLoader(BaseDataLoader):
 
 class CatDogDataLoader(BaseDataLoader):
     def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
-        self.data_dir = data_dir
-        self.label_file = os.path.join(data_dir, 'gt.txt')
+        if training:
+            data_dir = data_dir+"train/"
+        else:
+            data_dir = data_dir+"test/"
+        self.label_file = os.path.join(self.data_dir, 'gt.txt')
         if resize:
             compose_transform = transforms.Compose([
                 transforms.Resize(resize) ,
@@ -38,6 +41,28 @@ class CatDogDataLoader(BaseDataLoader):
                 transforms.ToTensor(),
                 Normalize(0,1)
             ])
-        self.dataset = CatDogDataset(data_dir, self.label_file, compose_transform)
-        print(self.dataset)
+        self.dataset = CatDogDataset(self.data_dir, self.label_file, compose_transform)
+        #print(self.dataset)
+        super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
+
+class BallDataLoader(BaseDataLoader):
+    def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
+        if training:
+            self.data_dir = data_dir+"train/"
+        else:
+            self.data_dir = data_dir+"test/"
+
+        if resize:
+            compose_transform = transforms.Compose([
+                transforms.Resize(resize) ,
+                transforms.ToTensor(),
+                Normalize(0, 1)
+            ])
+        else:
+            compose_transform = transforms.Compose([
+                transforms.ToTensor(),
+                Normalize(0,1)
+            ])
+        self.dataset = BallDataset(self.data_dir, compose_transform)
+        #print(self.dataset)
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
