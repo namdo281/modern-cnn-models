@@ -6,6 +6,7 @@ from operator import getitem
 from datetime import datetime
 from logger import setup_logging
 from utils import read_json, write_json
+from utils import read_yaml, write_yaml
 
 
 class ConfigParser:
@@ -37,7 +38,7 @@ class ConfigParser:
         self.log_dir.mkdir(parents=True, exist_ok=exist_ok)
 
         # save updated config file to the checkpoint dir
-        write_json(self.config, self.save_dir / 'config.json')
+        write_yaml(self.config, self.save_dir / 'config.json')
 
         # configure logging module
         setup_logging(self.log_dir)
@@ -68,10 +69,11 @@ class ConfigParser:
             resume = None
             cfg_fname = Path(args.config)
         
-        config = read_json(cfg_fname)
+        # config = read_json(cfg_fname)
+        config = read_yaml(cfg_fname)
         if args.config and resume:
             # update new config for fine-tuning
-            config.update(read_json(args.config))
+            config.update(read_yaml(args.config))
 
         # parse custom cli options into dictionary
         modification = {opt.target : getattr(args, _get_opt_name(opt.flags)) for opt in options}
