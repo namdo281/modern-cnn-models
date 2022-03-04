@@ -5,8 +5,8 @@ from functools import reduce, partial
 from operator import getitem
 from datetime import datetime
 from logger import setup_logging
-from utils import read_json, write_json
-from utils import read_yaml, write_yaml
+from utils import is_json, read_json, write_json
+from utils import is_yaml, read_yaml, write_yaml
 
 
 class ConfigParser:
@@ -38,8 +38,10 @@ class ConfigParser:
         self.log_dir.mkdir(parents=True, exist_ok=exist_ok)
 
         # save updated config file to the checkpoint dir
-        write_yaml(self.config, self.save_dir / 'config.json')
-
+        if is_yaml(self.save_dir):
+            write_yaml(self.config, self.save_dir / 'config.yaml')
+        elif is_yaml(self.save_dir):
+            write_json(self.config, self.save_dir / 'config.json')
         # configure logging module
         setup_logging(self.log_dir)
         self.log_levels = {
@@ -69,11 +71,16 @@ class ConfigParser:
             resume = None
             cfg_fname = Path(args.config)
         
-        # config = read_json(cfg_fname)
-        config = read_yaml(cfg_fname)
-        if args.config and resume:
-            # update new config for fine-tuning
-            config.update(read_yaml(args.config))
+        
+        if is_json(cfg_fname):
+            config = read_json(cfg_fname)
+            if args.config and resume:
+                # update new config for fine-tuning
+                config.update(read_json(args.config))
+        elif is_yaml(cfg_fname):
+            config = read_yaml(cfg_fname)
+            if args.config and resume:
+                config.update(read_yaml(args.config))
 
         # parse custom cli options into dictionary
         modification = {opt.target : getattr(args, _get_opt_name(opt.flags)) for opt in options}

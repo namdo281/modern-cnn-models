@@ -12,6 +12,14 @@ def ensure_dir(dirname):
     if not dirname.is_dir():
         dirname.mkdir(parents=True, exist_ok=False)
 
+def is_json(fname):
+    # print(1)
+    # print(fname)
+    # print(2)
+    return fname.name.endswith('.json')
+
+def is_yaml(fname):
+    return fname.name.endswith('.yaml')
 def read_json(fname):
     fname = Path(fname)
     with fname.open('rt') as handle:
