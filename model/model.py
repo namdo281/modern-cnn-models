@@ -356,9 +356,9 @@ class ResNet(MnistModel):
         return x
 
 class DenseNet(MnistModel):
-    def __init__(self, k):
+    def __init__(self, k, in_channels=1, num_classes=10):
         super().__init__()
-        self.conv1 = ConvLayer(1, k, kernel_size=7, stride=2, padding=3)
+        self.conv1 = ConvLayer(in_channels, k, kernel_size=7, stride=2, padding=3)
         self.pool1 = nn.MaxPool2d(kernel_size=3, stride = 2, padding = 1)
 
 
