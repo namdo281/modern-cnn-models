@@ -36,12 +36,10 @@ class ConfigParser:
         exist_ok = run_id == ''
         self.save_dir.mkdir(parents=True, exist_ok=exist_ok)
         self.log_dir.mkdir(parents=True, exist_ok=exist_ok)
-
+        #print(config)
         # save updated config file to the checkpoint dir
-        if is_yaml(self.save_dir):
-            write_yaml(self.config, self.save_dir / 'config.yaml')
-        elif is_yaml(self.save_dir):
-            write_json(self.config, self.save_dir / 'config.json')
+        write_yaml(self.config, self.save_dir / 'config.yaml')
+        write_json(self.config, self.save_dir / 'config.json')
         # configure logging module
         setup_logging(self.log_dir)
         self.log_levels = {
@@ -59,7 +57,6 @@ class ConfigParser:
             args.add_argument(*opt.flags, default=None, type=opt.type)
         if not isinstance(args, tuple):
             args = args.parse_args()
-
         if args.device is not None:
             os.environ["CUDA_VISIBLE_DEVICES"] = args.device
         if args.resume is not None:
@@ -70,8 +67,7 @@ class ConfigParser:
             assert args.config is not None, msg_no_cfg
             resume = None
             cfg_fname = Path(args.config)
-        
-        
+            
         if is_json(cfg_fname):
             config = read_json(cfg_fname)
             if args.config and resume:

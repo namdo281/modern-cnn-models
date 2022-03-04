@@ -13,10 +13,10 @@ class MnistModel(BaseModel):
 
 
 class AlexNet(MnistModel):
-    def __init__ (self):
+    def __init__ (self, in_channels = 1, num_classes=10):
         super().__init__()
         self.conv1 = nn.Conv2d(
-            in_channels= 3,
+            in_channels= in_channels,
             out_channels=96,
             stride= 4,
             kernel_size= 11,

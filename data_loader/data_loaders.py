@@ -4,7 +4,7 @@ from base import BaseDataLoader
 import datasets
 from torchvision import datasets as dts
 from datasets import CatDogDataset
-
+import os
 class MnistDataLoader(BaseDataLoader):
     """
     MNIST data loading demo using BaseDataLoader
@@ -26,6 +26,7 @@ class MnistDataLoader(BaseDataLoader):
 class CatDogDataLoader(BaseDataLoader):
     def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
         self.data_dir = data_dir
+        self.label_file = os.path.join(data_dir, 'gt.txt')
         if resize:
             compose_transform = transforms.Compose([
                 transforms.Resize(resize) ,
@@ -37,6 +38,6 @@ class CatDogDataLoader(BaseDataLoader):
                 transforms.ToTensor(),
                 Normalize(0,1)
             ])
-        self.dataset = CatDogDataset(data_dir, compose_transform)
+        self.dataset = CatDogDataset(data_dir, self.label_file, compose_transform)
         print(self.dataset)
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)

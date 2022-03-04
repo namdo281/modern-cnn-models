@@ -1,22 +1,24 @@
-name: CatDogDenseNet
+name: CatDogNet
 n_gpu: 0
 
 arch: 
-    type: DenseNet
+    type: AlexNet
     args: 
         in_channels: 3
-        k: 12
+        # k: 12
         num_classes: 2
     
 data_loader: 
     type: CatDogDataLoader
     args:
-        data_dir: data/catdog/train/
+        data_dir: data/catdog/test/
         batch_size: 128
         shuffle: true
-        validation_split: 0.1
+        validation_split: 0.2
         num_workers: 0
-        resize: [224,224]
+        resize: 
+        - 224
+        - 224
     
 optimizer:
     type: Adam
@@ -38,7 +40,7 @@ lr_scheduler:
     
 
 trainer: 
-    epochs: 100
+    epochs: 3
     save_dir: saved/
     save_period: 1
     verbosity: 2
