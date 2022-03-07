@@ -28,9 +28,9 @@ class MnistDataLoader(BaseDataLoader):
 class CatDogDataLoader(BaseDataLoader):
     def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
         if training:
-            data_dir = data_dir+"train/"
+            self.data_dir = data_dir+"train/"
         else:
-            data_dir = data_dir+"test/"
+            self.data_dir = data_dir+"test/"
         self.label_file = os.path.join(self.data_dir, 'gt.txt')
         if resize:
             compose_transform = transforms.Compose([

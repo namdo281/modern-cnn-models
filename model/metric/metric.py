@@ -11,8 +11,12 @@ def accuracy(output, target):
 
 
 def top_k_acc(output, target, k=3):
+    # print(output.shape)
+    # print(target.shape)
     with torch.no_grad():
         pred = torch.topk(output, k, dim=1)[1]
+        # print(pred.shape)
+        # print(len(target))
         assert pred.shape[0] == len(target)
         correct = 0
         for i in range(k):

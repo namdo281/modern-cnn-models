@@ -33,29 +33,18 @@ class Trainer(BaseTrainer):
     def _train_epoch(self, epoch):
         """
         Training logic for an epoch
-
         :param epoch: Integer, current training epoch.
         :return: A log that contains average loss and metric in this epoch.
         """
         self.model.train()
         self.train_metrics.reset()
         for batch_idx, (data, target) in enumerate(self.data_loader):
-            #if batch_idx == 50:
-                # print(data.shape)
-                # print(target.shape)
-            # if batch_idx == 0:
-            #     print(data.shape)
-            #     print(target)
-            #print(data)
             data, target = data.to(self.device), target.to(self.device)
-            
+
             self.optimizer.zero_grad()
             output = self.model(data)
-            # print(output.shape)
-            # print(target.shape)
             loss = self.criterion(output, target)
             loss.backward()
-            print(self.optimizer)
             self.optimizer.step()
 
             self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)
@@ -85,7 +74,6 @@ class Trainer(BaseTrainer):
     def _valid_epoch(self, epoch):
         """
         Validate after training an epoch
-
         :param epoch: Integer, current training epoch.
         :return: A log that contains information about validation
         """

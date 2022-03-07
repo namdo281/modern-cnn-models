@@ -35,8 +35,8 @@ class BallDataset(Dataset):
         path = os.path.join(self.root_dir, path)
         img = io.imread(path)
         # print(img)
-        plt.imshow(img)
-        plt.show()
+        # plt.imshow(img)
+        # plt.show()
         if len(img.shape) == 2:
             img = img.reshape((img.shape[0], img.shape[1], 1))
             chs = []

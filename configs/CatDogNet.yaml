@@ -2,7 +2,7 @@ name: CatDogNet
 n_gpu: 0
 
 arch: 
-    type: AlexNet
+    type: GoogLeNet
     args: 
         in_channels: 3
         # k: 12
@@ -30,7 +30,6 @@ optimizer:
 loss: nll_loss
 metrics: 
     - accuracy
-    - top_k_acc
 
 lr_scheduler: 
     type: StepLR

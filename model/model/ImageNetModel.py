@@ -280,12 +280,12 @@ class GoogLeNet(ImageNet):
             kernel_size= 7,
             stride = 1
         )
-        self.dropout = nn.Dropout2d(0.4)
         self.flatten = nn.Flatten()
         self.linear = nn.Linear(1024, self.num_classes)
     
     def forward(self, x):
         #print(x.shape)
+        # print(x.shape)
         x = self.conv1(x)
         x = F.relu(x)
         #print(x.shape)
@@ -314,11 +314,12 @@ class GoogLeNet(ImageNet):
         x = self.inception5b(x)
         x = self.pool5(x)
         #print(x.shape)
-
-        x = self.dropout(x)
+        # print(x.shape)
         x = self.flatten(x)
         x = self.linear(x)
+        # print(x.shape)
         x = F.log_softmax(x, dim = 1)
+        # print(x.shape)
         return x
 
 class ResNet(ImageNet):
@@ -333,7 +334,6 @@ class ResNet(ImageNet):
         self.pool = nn.AvgPool2d(kernel_size= 7)
         self.flatten = nn.Flatten()
         self.linear = nn.Linear(512, num_classes)
-        self.dropout = nn.Dropout()
     def forward(self, x):
         x = self.conv1(x)
         x = self.bn(x)
@@ -351,8 +351,8 @@ class ResNet(ImageNet):
         # `print(x.shape)
         x = self.flatten(x)
         x = self.linear(x)
-        x = self.dropout(x)
-        x = F.relu(x)
+        #x = self.dropout(x)
+        #x = F.relu(x)
         x = F.log_softmax(x, dim=1)
         return x
 
@@ -381,7 +381,6 @@ class DenseNet(ImageNet):
         self.pool2 = nn.AvgPool2d(kernel_size= 7)
         self.flatten = nn.Flatten()
         self.linear = nn.Linear(262, self.num_classes)
-        self.dropout = nn.Dropout()
 
     def forward(self, x):
         #print("forward")
@@ -408,7 +407,6 @@ class DenseNet(ImageNet):
         #print(x.shape)
         x = self.flatten(x)
         x = self.linear(x)
-        x = self.dropout(x)
         x = F.log_softmax(x, dim = 1)
         return x
 

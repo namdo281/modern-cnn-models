@@ -2,7 +2,7 @@ name: MnistNet
 n_gpu: 0
 
 arch: 
-    type: AlexNet
+    type: BallNet
     args: 
         in_channels: 1
         # k: 12
@@ -16,9 +16,6 @@ data_loader:
         shuffle: true
         validation_split: 0.2
         num_workers: 0
-        resize: 
-        - 224
-        - 224
     
 optimizer:
     type: Adam
