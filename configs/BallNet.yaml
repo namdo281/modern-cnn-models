@@ -2,7 +2,7 @@ name: BallNet
 n_gpu: 0
 
 arch: 
-    type: GoogLeNet
+    type: MobileNet
     args: 
         in_channels: 3
         num_classes: 26
@@ -39,7 +39,7 @@ lr_scheduler:
     
 
 trainer: 
-    epochs: 10
+    epochs: 50
     save_dir: saved/
     save_period: 2
     verbosity: 2

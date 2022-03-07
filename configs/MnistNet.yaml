@@ -2,7 +2,7 @@ name: MnistNet
 n_gpu: 0
 
 arch: 
-    type: BallNet
+    type: MobileNet
     args: 
         in_channels: 1
         # k: 12
@@ -37,7 +37,7 @@ lr_scheduler:
     
 
 trainer: 
-    epochs: 3
+    epochs: 10
     save_dir: saved/
     save_period: 1
     verbosity: 2
