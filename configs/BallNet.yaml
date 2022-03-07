@@ -1,18 +1,17 @@
-name: MnistNet
+name: BallNet
 n_gpu: 0
 
 arch: 
-    type: AlexNet
+    type: GoogLeNet
     args: 
-        in_channels: 1
-        # k: 12
-        num_classes: 10
+        in_channels: 3
+        num_classes: 26
     
 data_loader: 
     type: BallDataLoader
     args:
         data_dir: data/balls/
-        batch_size: 128
+        batch_size: 64
         shuffle: true
         validation_split: 0.2
         num_workers: 0
@@ -23,7 +22,7 @@ data_loader:
 optimizer:
     type: Adam
     args:
-        lr: 1.0e-3
+        lr: 1.0e-2
         weight_decay: 0
         amsgrad: true
     
@@ -40,9 +39,9 @@ lr_scheduler:
     
 
 trainer: 
-    epochs: 3
+    epochs: 10
     save_dir: saved/
-    save_period: 1
+    save_period: 2
     verbosity: 2
     monitor: min val_loss
     early_stop: 10

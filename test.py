@@ -2,9 +2,9 @@ import argparse
 import torch
 from tqdm import tqdm
 import data_loader.data_loaders as module_data
-import model.loss as module_loss
-import model.metric as module_metric
-import model.model as module_arch
+import model.loss.loss as module_loss
+import model.metric.metric as module_metric
+import model.model.model as module_arch
 from parse_config import ConfigParser
 
 
@@ -47,7 +47,7 @@ def main(config):
 
     with torch.no_grad():
         for i, (data, target) in enumerate(tqdm(data_loader)):
-            print(i)
+            #print(i)
             data, target = data.to(device), target.to(device)
             output = model(data)
 

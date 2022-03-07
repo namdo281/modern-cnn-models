@@ -43,12 +43,19 @@ class Trainer(BaseTrainer):
             #if batch_idx == 50:
                 # print(data.shape)
                 # print(target.shape)
+            # if batch_idx == 0:
+            #     print(data.shape)
+            #     print(target)
+            #print(data)
             data, target = data.to(self.device), target.to(self.device)
             
             self.optimizer.zero_grad()
             output = self.model(data)
+            # print(output.shape)
+            # print(target.shape)
             loss = self.criterion(output, target)
             loss.backward()
+            print(self.optimizer)
             self.optimizer.step()
 
             self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)

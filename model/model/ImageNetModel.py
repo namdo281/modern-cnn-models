@@ -3,20 +3,20 @@ import torch.nn.functional as F
 from base import BaseModel
 from .modules import *
 
-class MnistModel(BaseModel):
-    def __init__(self, num_classes=10):
+class ImageNet(BaseModel):
+    def __init__(self, in_channels = 3, num_classes = 1000):
         super().__init__()
         self.num_classes = num_classes
-
+        self.in_channels = in_channels
     def forward(self, x):
         return x
 
 
-class AlexNet(MnistModel):
+class AlexNet(ImageNet):
     def __init__ (self, in_channels = 1, num_classes=10):
-        super().__init__()
+        super().__init__(in_channels,num_classes)
         self.conv1 = nn.Conv2d(
-            in_channels= in_channels,
+            in_channels= self.in_channels,
             out_channels=96,
             stride= 4,
             kernel_size= 11,
@@ -94,11 +94,11 @@ class AlexNet(MnistModel):
         return output
 
 
-class VGGNet(MnistModel):
-    def __init__ (self):
-        super().__init__()
+class VGGNet(ImageNet):
+    def __init__ (self, in_channels = 3, num_classes = 26):
+        super().__init__(in_channels, num_classes)
         self.conv1 = nn.Conv2d(
-            in_channels= 1,
+            in_channels= self.in_channels,
             out_channels=96,
             stride= 4,
             kernel_size= 11,
@@ -146,6 +146,7 @@ class VGGNet(MnistModel):
         self.linear2 = nn.Linear(256, 256)
         self.dropout2 = nn.Dropout(0.5)
         self.linear3 = nn.Linear(256, self.num_classes)
+
     def forward(self, x):
         #print(x.shape)
         #print(x.shape)
@@ -175,11 +176,11 @@ class VGGNet(MnistModel):
         #print(output.shape)
         return output
 
-class GoogLeNet(MnistModel):
+class GoogLeNet(ImageNet):
     def __init__(self, in_channels = 3, num_classes=10):
-        super().__init__()
+        super().__init__(in_channels, num_classes)
         self.conv1 = nn.Conv2d(
-            in_channels=in_channels,
+            in_channels=self.in_channels,
             out_channels=64,
             kernel_size=7,
             stride=2,
@@ -320,10 +321,10 @@ class GoogLeNet(MnistModel):
         x = F.log_softmax(x, dim = 1)
         return x
 
-class ResNet(MnistModel):
-    def __init__(self):
-        super().__init__()
-        self.conv1 = nn.Conv2d(1, 64, 7, stride = 2 , padding= 3 )
+class ResNet(ImageNet):
+    def __init__(self, in_channels=3, num_classes = 1000):
+        super(ResNet, self).__init__(in_channels, num_classes)
+        self.conv1 = nn.Conv2d(in_channels, 64, 7, stride = 2 , padding= 3 )
         self.bn = nn.BatchNorm2d(64)
         self.residual1 = ResidualBlock(64, 64, 2)
         self.residual2 = ResidualBlock(64, 128, 2)
@@ -331,7 +332,7 @@ class ResNet(MnistModel):
         self.residual4 = ResidualBlock(256, 512, 2)
         self.pool = nn.AvgPool2d(kernel_size= 7)
         self.flatten = nn.Flatten()
-        self.linear = nn.Linear(512, self.num_classes)
+        self.linear = nn.Linear(512, num_classes)
         self.dropout = nn.Dropout()
     def forward(self, x):
         x = self.conv1(x)
@@ -355,10 +356,10 @@ class ResNet(MnistModel):
         x = F.log_softmax(x, dim=1)
         return x
 
-class DenseNet(MnistModel):
-    def __init__(self, k, in_channels=1, num_classes=10):
-        super().__init__()
-        self.conv1 = ConvLayer(in_channels, k, kernel_size=7, stride=2, padding=3)
+class DenseNet(ImageNet):
+    def __init__(self, k, in_channels=3, num_classes = 1000):
+        super().__init__(in_channels, num_classes)
+        self.conv1 = ConvLayer(self.in_channels, k, kernel_size=7, stride=2, padding=3)
         self.pool1 = nn.MaxPool2d(kernel_size=3, stride = 2, padding = 1)
 
 

@@ -5,6 +5,8 @@ import datasets
 from torchvision import datasets as dts
 from datasets import CatDogDataset, BallDataset
 import os
+
+
 class MnistDataLoader(BaseDataLoader):
     """
     MNIST data loading demo using BaseDataLoader
@@ -47,11 +49,13 @@ class CatDogDataLoader(BaseDataLoader):
 
 class BallDataLoader(BaseDataLoader):
     def __init__(self, data_dir, batch_size, shuffle = True, validation_split=0.0, num_workers = 1, training = True, resize = None):
+        class_dict_file = os.path.join(data_dir, "class_dict.csv")
         if training:
-            self.data_dir = data_dir+"train/"
+            self.data_dir = os.path.join(data_dir, "train/")
         else:
-            self.data_dir = data_dir+"test/"
-
+            self.data_dir = os.path.join(data_dir, "train/")
+        
+        self.class_dict_file = class_dict_file
         if resize:
             compose_transform = transforms.Compose([
                 transforms.Resize(resize) ,
@@ -63,6 +67,6 @@ class BallDataLoader(BaseDataLoader):
                 transforms.ToTensor(),
                 Normalize(0,1)
             ])
-        self.dataset = BallDataset(self.data_dir, compose_transform)
+        self.dataset = BallDataset(self.data_dir, self.class_dict_file, compose_transform)
         #print(self.dataset)
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
