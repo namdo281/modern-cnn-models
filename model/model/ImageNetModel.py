@@ -1,3 +1,5 @@
+from multiprocessing import pool
+from torch import relu
 import torch.nn as nn
 import torch.nn.functional as F
 from base import BaseModel
@@ -412,48 +414,36 @@ class DenseNet(ImageNet):
 
 
 class MobileNet(ImageNet):
-    def __init__(self, in_channels = 3, num_classes = 1000, alpha=1 , rho=1):
-        super().__init__(in_channels, num_classes)
-        self.conv1 = nn.Conv2d(in_channels, 32*alpha, kernel_size= 3, padding= 1, stride = 1 )
-        self.alpha = alpha
-        self.rho = rho
-        self.bn1 = nn.BatchNorm2d(self.conv1.out_channels)
-        self.pool1 = nn.MaxPool2d(kernel_size=3)
-        self.ds_conv1 = DepthwiseSeparableConv(self.conv1.out_channels, 64*alpha)
-        self.ds_conv2 = DepthwiseSeparableConv(self.ds_conv1.out_channels, 128*alpha, stride = 2)
-        self.ds_conv3 = DepthwiseSeparableConv(self.ds_conv2.out_channels, 128*alpha)
-        self.ds_conv4 = DepthwiseSeparableConv(self.ds_conv3.out_channels, 256*alpha)
-        self.ds_conv5 = DepthwiseSeparableConv(self.ds_conv4.out_channels, 256*alpha)
-        self.ds_conv6 = DepthwiseSeparableConv(self.ds_conv5.out_channels, 512*alpha, stride = 2)
-        ds_conv7891011 = []
-        for i in range(7, 12):
-            conv = DepthwiseSeparableConv(512*alpha, 512*alpha)
-            ds_conv7891011.append(conv)
-        self.ds_conv7891011 = nn.Sequential(*ds_conv7891011)
-        self.ds_conv12 = DepthwiseSeparableConv(512*alpha, 1024*alpha)
-        self.ds_conv13 = DepthwiseSeparableConv(1024*alpha, 1024*alpha, stride= 2)
-        self.pool2 = nn.AdaptiveAvgPool2d(1)
-        self.flatten = nn.Flatten()
+    def __init__(self, in_channels = 3, num_classes = 1000):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels, 32, 3, 2)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.convs = nn.Sequential(
+            DepthwiseSeparableConv(32, 64),
+            DepthwiseSeparableConv(64, 128, stride = 2),
+            DepthwiseSeparableConv(128, 128),
+            DepthwiseSeparableConv(128, 256),
+            DepthwiseSeparableConv(256, 256),
+            DepthwiseSeparableConv(256, 512, stride = 2),
+            DepthwiseSeparableConv(512, 512),
+            DepthwiseSeparableConv(512, 512),
+            DepthwiseSeparableConv(512, 512),
+            DepthwiseSeparableConv(512, 512),
+            DepthwiseSeparableConv(512, 512),
+            DepthwiseSeparableConv(512, 1024, stride = 2),
+            DepthwiseSeparableConv(1024, 1024, stride= 2),
+            nn.AdaptiveAvgPool2d(1)
+        )
+        
         self.fc = nn.Linear(1024, num_classes)
 
     def forward(self, x):
-        x = F.interpolate(x, self.rho*x.shape[2:])
         x = self.conv1(x)
+        print(x)
         x = self.bn1(x)
         x = F.relu(x)
-        x = self.ds_conv1(x)
-        x = self.ds_conv2(x)
-        x = self.ds_conv3(x)
-        x = self.ds_conv4(x)
-        x = self.ds_conv5(x)
-        x = self.ds_conv6(x)
-        x = self.ds_conv7891011(x)
-        x = self.ds_conv12(x)
-        x = self.ds_conv13(x)
-        x = self.pool2(x)
-        x = self.flatten(x)
+        x = self.convs(x)
+        x = x.view(-1, 1024)
         x = self.fc(x)
         x = F.log_softmax(x, dim = 1)
         return x
-
-
