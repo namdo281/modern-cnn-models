@@ -439,7 +439,7 @@ class MobileNet(ImageNet):
 
     def forward(self, x):
         x = self.conv1(x)
-        print(x)
+        # print(x)
         x = self.bn1(x)
         x = F.relu(x)
         x = self.convs(x)
