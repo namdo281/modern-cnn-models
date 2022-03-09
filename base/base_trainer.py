@@ -22,7 +22,7 @@ class BaseTrainer:
         self.save_period = cfg_trainer['save_period']
         self.monitor = cfg_trainer.get('monitor', 'off')
 
-        # configuration to monitor model performance and save best
+        # configuration to monitor models performance and save best
         if self.monitor == 'off':
             self.mnt_mode = 'off'
             self.mnt_best = 0
@@ -70,11 +70,11 @@ class BaseTrainer:
             for key, value in log.items():
                 self.logger.info('    {:15s}: {}'.format(str(key), value))
 
-            # evaluate model performance according to configured metric, save best checkpoint as model_best
+            # evaluate models performance according to configured metric, save best checkpoint as model_best
             best = False
             if self.mnt_mode != 'off':
                 try:
-                    # check whether model performance improved or not, according to specified metric(mnt_metric)
+                    # check whether models performance improved or not, according to specified metric(mnt_metric)
                     improved = (self.mnt_mode == 'min' and log[self.mnt_metric] <= self.mnt_best) or \
                                (self.mnt_mode == 'max' and log[self.mnt_metric] >= self.mnt_best)
                 except KeyError:

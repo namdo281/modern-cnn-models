@@ -23,7 +23,7 @@ class ConfigParser:
         self._config = _update_config(config, modification)
         self.resume = resume
 
-        # set save_dir where trained model and log will be saved.
+        # set save_dir where trained models and log will be saved.
         save_dir = Path(self.config['trainer']['save_dir'])
 
         exper_name = self.config['name']

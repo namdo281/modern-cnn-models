@@ -4,7 +4,7 @@ from tqdm import tqdm
 import data_loader.data_loaders as module_data
 import model.loss.loss as module_loss
 import model.metric.metric as module_metric
-import model.model.model as module_arch
+import model.models.model as module_arch
 from parse_config import ConfigParser
 
 
@@ -22,7 +22,7 @@ def main(config):
         num_workers=2
     )
 
-    # build model architecture
+    # build models architecture
     model = config.init_obj('arch', module_arch)
     logger.info(model)
 
@@ -37,7 +37,7 @@ def main(config):
         model = torch.nn.DataParallel(model)
     model.load_state_dict(state_dict)
 
-    # prepare model for testing
+    # prepare models for testing
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
     model.eval()

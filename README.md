@@ -104,7 +104,7 @@ Config files are in `.json` format:
   "n_gpu": 1,                   // number of GPUs to use for training.
   
   "arch": {
-    "type": "MnistModel",       // name of model architecture to train
+    "type": "MnistModel",       // name of models architecture to train
     "args": {
 
     }                
@@ -144,7 +144,7 @@ Config files are in `.json` format:
     "save_freq": 1,                    // save checkpoints every save_freq epochs
     "verbosity": 2,                    // 0: quiet, 1: per epoch, 2: full
   
-    "monitor": "min val_loss"          // mode and metric for model performance monitoring. set 'off' to disable.
+    "monitor": "min val_loss"          // mode and metric for models performance monitoring. set 'off' to disable.
     "early_stop": 10	                 // number of epochs to wait before early stop. set 0 to disable.
   
     "tensorboard": true,               // enable tensorboard visualization
