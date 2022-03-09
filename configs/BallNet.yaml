@@ -2,7 +2,7 @@ name: BallNet
 n_gpu: 0
 
 arch: 
-    type: MobileNetV1
+    type: MobileNetV2
     args: 
         in_channels: 3
         num_classes: 26

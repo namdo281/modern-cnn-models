@@ -21,3 +21,25 @@ class DepthwiseSeparableConv(nn.Module):
         x = self.bn2(x)
         x = F.relu(x, inplace=True)
         return x
+
+
+class BottleNeckResidualBlock(nn.Module):
+    def __init__(self, inc, ouc, ef, stride):
+        super().__init__()
+        hic = ef * inc
+        self.conv = nn.Sequential(
+            nn.Conv2d(inc, hic, (1, 1), 1),
+            nn.BatchNorm2d(hic),
+            nn.ReLU6(inplace=True),
+            nn.Conv2d(hic, hic, (3, 3), stride, padding=1, groups=hic),
+            nn.BatchNorm2d(hic),
+            nn.ReLU6(inplace=True),
+            nn.Conv2d(hic, ouc, (1, 1), 1)
+        )
+        self.id_conv = nn.Conv2d(inc, ouc, (1, 1), stride)
+
+    def forward(self, x):
+        x1 = self.conv(x)
+        x2 = self.id_conv(x)
+        return x1 + x2
+

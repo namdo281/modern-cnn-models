@@ -5,3 +5,4 @@ from .GoogLeNet import GoogLeNet
 from .ResNet import ResNet
 from .DenseNet import DenseNet
 from .MobileNetV1 import MobileNetV1
+from .MobileNetV2 import MobileNetV2
